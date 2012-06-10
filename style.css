@@ -1,0 +1,51 @@
+/* General */
+*	{margin:0;	padding:0;}
+html	{width:100%;	font-family:sans-serif;}
+body	{width:100%;}
+
+img				{max-width:270px; max-height:270px;}
+a img			{border:0;}
+.entrybody img	{background:#ffffff;}
+
+
+/* Header */
+h1{
+	padding		:5px 0;
+	display		:block;
+	width		:100%;
+	text-align	:center;
+	background	:#d49997;
+	color		:#fff;
+	font-size	:14pt;
+}
+
+
+/* Haiku Form */
+#haikuForm		{margin:5px;}
+
+
+/* Entries */
+.entry{
+	position	:relative;
+	padding		:0.5em 0;
+}
+
+
+/* Footer */
+#copy{font-size:9pt; text-align:center;}
+
+
+/* Login */
+form#login input{
+	margin		:0 0 10px 0;
+	width		:100%;
+	font-size	:16pt;
+}
+form#login input#button{
+	margin		:10px 0 0 0;
+}
+
+/* inline */
+.il	{display:inline;}
+
+.picopen{color:blue;text-decoration:underline;cursor:pointer;}

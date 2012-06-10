@@ -1,0 +1,19 @@
+/* Haiku Form */
+
+/* Entry */
+.pub	{background:#cbe1ee;}
+.usr	{background:#f4d9d7;}
+.key	{background:#ded;}
+.white	{background:#fff;}
+
+/* ASIN box. */
+#ibox{background	:#dcd;}
+
+/* Hatena Star */
+.star		{color:#ed0;font-size:9pt;}
+.greenstar	{color:#0d2;font-size:9pt;}
+.bluestar	{color:#0cd;font-size:9pt;}
+.redstar	{color:#d33;font-size:9pt;}
+.purplestar	{color:#818;font-size:9pt;}
+
+#foot	{background:#ddc;}

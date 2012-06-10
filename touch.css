@@ -1,0 +1,218 @@
+/* Header */
+html	{background:#ccc;}
+body	{margin:0 auto;width:100%;background:#fff;}
+
+ul#headmenu{width:100%;}
+ul#headmenu li{
+	float			:left;
+	display			:block;
+	line-height		:2em;
+	list-style-type	:none;
+	text-align		:center;
+	font-size		:14pt;
+}
+ul#headmenu li a{
+	display			:block;
+	color			:#fff;
+	text-decoration	:none;
+}
+ul#headmenu #user		{background:#d49997;width:34%;}
+ul#headmenu #public		{background:#9997d4;width:33%;}
+ul#headmenu #keyword	{background:#99d497;width:33%;}
+ul#headmenu:after	{
+	height		:0;
+	visibility	:hidden;
+	content		:"";
+	display		:block;
+	clear		:both;
+}
+
+@media only screen
+and (min-device-width:320px){
+	body				{width:320px;}
+	ul#headmenu li		{width:106px;}
+	ul#headmenu #keyword{width:108px;}
+}
+
+.popupbox{
+	z-index		:5;
+	position	:absolute;
+	width		:280px;
+}
+#usermenu{
+	padding			:3px;
+	left			:12px;
+	color			:#fff;
+	background		:#d49997;
+	border-left		:1px solid #ffbcba;
+	border-right	:1px solid #9a7672;
+	border-bottom	:1px solid #9a7672;
+}
+#hotkeyslist{
+	padding			:3px;
+	left			:32px;
+	background		:#99d497;
+	border-left		:1px solid #bcffba;
+	border-right	:1px solid #769a72;
+	border-bottom	:1px solid #769a72;
+}
+#usermenu h3{
+	margin-top	:1em;
+	color		:#fff;
+}
+#usermenu ul		{border-top:1px solid #ffbcba;}
+#hotkeyslist ul		{border-top:1px solid #bcffba;}
+#usermenu ul li		{list-style:none;border-bottom:1px solid #ffbcba;background:url(li-user.gif) no-repeat right;}
+#hotkeyslist ul li	{list-style:none;border-bottom:1px solid #bcffba;background:url(li-key.gif)  no-repeat right;}
+#usermenu ul li a	{padding-right:10px;}
+#hotkeyslist ul li a{padding-right:10px;}
+#usermenu a,
+#hotkeyslist a{
+	display			:block;
+	padding			:10px 0;
+	color			:#fff;
+	background		:transparent;
+	text-decoration	:none;
+}
+#usermenu a:visited,
+#hotkeyslist a:visited{color:#ddd;}
+.center	{text-align:center;}
+
+
+/* Haiku Form */
+#haikuForm #keyword	{margin:5px 0;width:90%;font-size:12pt;}
+#haikuForm #status	{margin:5px 0;width:100%;font-size:12pt;}
+#haikuForm #haiku	{font-size:11pt;width:6em;}
+#haikuForm #mail	{font-size:9pt;margin-left:1em;}
+
+
+/* Entries */
+.pub{
+	border-bottom	:1px solid #cbe1ee;
+	background		:-webkit-gradient(linear, left top, left bottom, from(#cbe1ee), color-stop(0.8, #fff), to(#fff));
+	background		:-moz-linear-gradient(top, #cbe1ee, #fff 80%);
+	background		:-o-linear-gradient(top, #cbe1ee, #fff 80%);
+ 	-ms-filter		:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFcbe1ee, endColorstr=#FFFFFFFF)";
+}
+.usr{	
+	border-bottom	:1px solid #f4d9d7;
+	background		:-webkit-gradient(linear, left top, left bottom, from(#f4d9d7), color-stop(0.8, #fff), to(#fff));
+	background		:-moz-linear-gradient(top, #f4d9d7, #fff 80%);
+	background		:-o-linear-gradient(top, #f4d9d7, #fff 80%);
+ 	-ms-filter		:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFf4d9d7, endColorstr=#FFFFFFFF)";
+}
+.key{
+	border-bottom	:1px solid #ded;
+	background		:-webkit-gradient(linear, left top, left bottom, from(#ded), color-stop(0.8, #fff), to(#fff));
+	background		:-moz-linear-gradient(top, #ded, #fff 80%);
+	background		:-o-linear-gradient(top, #ded, #fff 80%);
+ 	-ms-filter		:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFddeedd, endColorstr=#FFFFFFFF)";
+}
+.entryuser{
+	background		:transparent;
+	vertical-align	:top;
+	margin			:0 5px 5px;
+	word-wrap		:break-word;
+}
+.icon{
+	background			:#fff;
+	width				:38px;
+	height				:38px;
+	padding				:1px;
+	margin-right		:3px;
+	border-radius		:3px;
+	-moz-border-radius	:3px;
+	border				:1px solid #888;
+	vertical-align		:top;
+	float				:left;
+}
+.entrybody{
+	clear		:left;
+	background	:transparent;
+	margin		:10px 5px 0;
+	word-wrap	:break-word;
+}
+
+/* override */
+img	{max-width:305px;	max-height:305px;}
+
+/* YouTube */
+.yt	{width:300px;height:225px;}
+
+/* ASIN box */
+#ibox{
+	border-bottom	:1px solid #dcd;
+	background		:-webkit-gradient(linear, left top, left bottom, from(#dcd), color-stop(0.8, #fff), to(#fff));
+	background		:-moz-linear-gradient(top, #dcd, #fff 80%);
+	background		:-o-linear-gradient(top, #dcd, #fff 80%);
+ 	-ms-filter		:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFddccdd, endColorstr=#FFFFFFFF)";
+	padding			:10px;
+}
+#asinpic{
+	float:left;
+}
+#asininfo{
+	padding-left:80px;
+}
+#asindetail{
+	font-size:80%;
+}
+#asininfo:after{
+	height		:0;
+	visibility	:hidden;
+	content		:"";
+	display		:block;
+	clear		:both;
+}
+
+/* Hatena Star */
+.hatena-star-comment-button{
+	width	:40px;
+	height	:40px;
+}
+.hatena-star-add-button{
+	width	:40px;
+	height	:40px;
+}
+.aa	{
+/* http://b4t.jp/p_blog/article.php?id=823 */
+	font-family	:IPAMonaPGothic,'ＭＳ Ｐゴシック',sans-serif;
+	font-size	:16px;
+	line-height	:18px;
+}
+
+/* Keyword Picker */
+.keyPicker	{
+	position	:absolute;
+	top			:0px;
+	left		:0px;
+	width		:100%;
+	height		:100%;
+	background	:url(graybg.png);
+}
+
+.keyPickerWrapper {
+	z-index		:6;
+	position	:relative;
+	margin		:50px auto;
+	width		:280px;
+}
+
+.keyPickerBody	{
+	z-index			:7;
+	padding			:30px 10px;
+	background		:#ffffff;
+	border-radius	:20px;
+}
+.keyPicker #close	{
+	position	:absolute;
+	top			:10px;
+	right		:10px;
+}
+.keyPickerObject	{
+	width		:200px;
+}
+
+.keyPickerBody form	{
+	margin		:10px 0;
+}
