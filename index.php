@@ -154,12 +154,12 @@ if ($camdata) {
 
 		if ($mode == 'user') {
 			/* User Entries */
-			$showProfile = $modeparam;
+			$showProfile = "id:".$modeparam;
 			$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline/'.$modeparam.'.xml?body_formats=haiku');
 		}
 		else if ($mode == 'following') {
 			/* Following Entries */
-			$showProfile = 0;
+			$showProfile = "id:".$modeparam;
 			if (!$modeparam) { die('ユーザ名が指定されていません。<a href="'.$script.'">もどる</a>'); }
 			$req->setURL('http://h.hatena.ne.jp/api/statuses/friends_timeline/'.$modeparam.'.xml?body_formats=haiku');
 		}
@@ -231,6 +231,7 @@ if ($login) {
 <?php
 	if ($sata != '') { print '<span id="mail"><a href="mailto:'.$password.'@h.hatena.ne.jp?subject='.$sata.'">メールで送る</a></span>';; }
 	if ($rtinfo) { print '<span id="mail"><a href="mailto:'.$password.'.'.$modeparam.'@h.hatena.ne.jp?subject='.$sata.'">メールで返信する</a></span>'; }
+	if ($isAndroid) { print '<img src="search_kamaboko.gif" onClick="popupCam()">'; }
 ?>
 </form><hr>
 <?php
@@ -287,7 +288,7 @@ EOM;
 	print preg_replace('/(\n|\t)/', '', $s);
 	print ($mobile != 1) ? '<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script><script type="text/javascript">'.getJavaScript().'</script>' : '';
 	if ($isAndroid) {
-		print '<script src="android-opera-cam.js" type="text/javascript"></script><img src="search_kamaboko.gif" onClick="popupCam()"><span id="popupCamStat" class="none"></span>';
+		print '<script src="android-opera-cam.js" type="text/javascript"></script><span id="popupCamStat" class="none"></span>';
 	}
 ?>
 </body></html>

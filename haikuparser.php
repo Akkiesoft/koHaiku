@@ -299,22 +299,24 @@ $replace = "<span class=\"picopen\" onclick=\"showImage('$match', '$match', '', 
 	$pattern = array(
 		'/idea:([0-9]+)/',
 		'/map\:([.0-9]+)\:([.0-9]+)/',
+		'/\n/'
 	);
 	$replace = array(
 		'<a href="http://i.hatena.ne.jp/idea/\\1">\\0</a>',
 		'<a href="http://maps.google.com/maps?q=\\1,\\2"><img src="http://maps.google.com/maps/api/staticmap?maptype=mobile&markers=\\1%2C\\2&sensor=false&size=140x140&zoom=13" alt="map"></a><br>',
+		'<br>'
 	);
 	$text = preg_replace($pattern, $replace, $text);
 
 	// 現在の端末用の HTML_Emoji オブジェクトを作成
-	$emoji = HTML_Emoji::getInstance();
+//	$emoji = HTML_Emoji::getInstance();
 	// PC で表示する際に用いる画像ファイルの URL を指定
-	$emoji->setImageUrl('images/');
+//	$emoji->setImageUrl('images/');
 	// 現在の端末で表示するのに適した形にデータを変換
 	//$out = $emoji->filter($text, 'output');
-	$text = $emoji->convertCarrier($text);
+//	$text = $emoji->convertCarrier($text);
 
-	$text = str_replace("\n", '<br>', $text);
+//	$text = str_replace("\n", '<br>', $text);
 
 	// AA Sintax(これは改行を<br>に変換した後でやる)
 	preg_match_all('/\&gt\;\|aa\|\<br\>/', $text, $matches, PREG_OFFSET_CAPTURE);

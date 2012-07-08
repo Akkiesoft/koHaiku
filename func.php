@@ -4,7 +4,7 @@ require_once('amaz.php');
 require_once('haikuparser.php');
 
 // HTML_Emoji ライブラリの読み込み
-require_once 'Emoji.php';
+//require_once 'Emoji.php';
 
 function getEntry($entryid)
 {
@@ -121,11 +121,12 @@ function parseEntries($xml, $color = 'usr', $showProfile = 0)
 
 	$addFavorite .= ''; //'<a href="/">お気に入りに追加';
 	if ($showProfile) {
-		if ($color == 'usr' || ($color == 'key' && preg_match('/^id\:([0-9A-Za-z-_]+)$/', $showProfile))) {
-			$nick = htmlspecialchars($rss->status[0]->user->name);
-			$id   = $rss->status[0]->user->screen_name;
-			$icon = $rss->status[0]->user->profile_image_url;
-			$fans = $rss->status[0]->user->followers_count;
+		if ($color == 'usr' || ($color == 'key' && $match = preg_match('/^id\:([0-9A-Za-z-_]+)$/', $showProfile))) {
+			$id = substr($showProfile, 3);
+			$profile_xml = simplexml_load_file('http://h.hatena.ne.jp/api/friendships/show/id:'.$id.'.xml');
+			$nick = htmlspecialchars($profile_xml->name);
+			$icon = $profile_xml->profile_image_url;
+			$fans = $profile_xml->followers_count;
 			$ngided = '';
 			if ($ngid && mb_strpos($ngid, $id) !== FALSE) {
 				$icon = 'http://8639.tk/5819/baloon.gif';
