@@ -1,6 +1,7 @@
 <?php
 	require_once 'HTTP/Request.php';
 	mb_http_output ('UTF-8');
+	date_default_timezone_set('Asia/Tokyo');
 
 	require_once('config.php');
 
@@ -16,11 +17,19 @@
 	}
 	$pattern = '/Android/';
 	$isAndroid = (preg_match($pattern, $ua)) ? 1:0;
+	$isAndroidOpera = 0;
+	if ($isAndroid) {
+		$pattern = '/(Opera Mobi)/';
+		if (preg_match($pattern, $ua)) {
+			$isAndroidOpera = 1;
+			include('operacam.php');
+		}
+	}
 
 	$ngid = '';
 	$ngkey = '';
 
-	if ($login) {
+	if ($login && $usedb) {
 		/* DBÚ‘± */
 		if (! $mysql = mysql_connect($dbaddr, $dbuser, $dbpass) ) {
 			print 'DB‚ÌÚ‘±‚ÉŽ¸”s‚µ‚Ü‚µ‚½cB';

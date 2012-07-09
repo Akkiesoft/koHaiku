@@ -211,7 +211,7 @@ $replace = "<span class=\"picopen\" onclick=\"showImage('$match', '$match', '', 
 			$pattern = array(); $replace = array();
 			// ニコ動
 			$pattern[] = '/http:\/\/(www\.)?(nicovideo\.jp\/watch|nico\.ms)\/(sm|nm)([0-9]+)/';
-			$replace[] = '<div><iframe width="300" height="185" src="http://ext.nicovideo.jp/thumb/\\3\\4" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="'.$line.'">'.$line.'</a></iframe></div>';
+			$replace[] = '<div><iframe width="300" height="185" src="http://ext.nicovideo.jp/thumb/\\3\\4" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="\\0">\\0</a></iframe></div>';
 			// YouTube
 			$pattern[] = '/http:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([-_0-9a-zA-Z]+)/';
 			$replace[] = '<div class="yt"><object width="300" height="225"><param name="movie" value="http://www.youtube.com/v/\\3"><param name="wmode" value="transparent"><embed src="http://www.youtube.com/v/\\3" type="application/x-shockwave-flash" wmode="transparent" width="300" height="225"></object></div>';
@@ -233,7 +233,7 @@ $replace = "<span class=\"picopen\" onclick=\"showImage('$match', '$match', '', 
 
 	// URL Sintax
 	$sintaxes = explode('[', $text);
-	if ($sintax[0] != $text) {
+	if ($sintaxes[0] != $text) {
 		foreach ($sintaxes as $sintax) {
 			$i = strpos($sintax, ']');
 			if ($i === FALSE) {
@@ -247,7 +247,7 @@ $replace = "<span class=\"picopen\" onclick=\"showImage('$match', '$match', '', 
 
 	// Keyword Sintax
 	$sintaxes = explode('[[', $text);
-	if ($sintax[0] != $text) {
+	if ($sintaxes[0] != $text) {
 		foreach ($sintaxes as $sintax) {
 			$i = strpos($sintax, ']]');
 			if ($i === FALSE) {

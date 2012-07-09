@@ -10,6 +10,7 @@
 	$secret_access_key = '';
 
 	// DB
+	$usedb  = 0;
 	$dbaddr = 'localhost';
 	$dbuser = '';
 	$dbpass = '';

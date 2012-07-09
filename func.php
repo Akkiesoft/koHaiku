@@ -119,7 +119,7 @@ function parseEntries($xml, $color = 'usr', $showProfile = 0)
 	$cnt = 0;
 	$bg = $color;
 
-	$addFavorite .= ''; //'<a href="/">お気に入りに追加';
+	$addFavorite = ''; //'<a href="/">お気に入りに追加';
 	if ($showProfile) {
 		if ($color == 'usr' || ($color == 'key' && $match = preg_match('/^id\:([0-9A-Za-z-_]+)$/', $showProfile))) {
 			$id = substr($showProfile, 3);
@@ -324,6 +324,7 @@ function printPageNavigator($pagenum)
 {
 	global $ver;
 	$baseurl = preg_replace('/(\?|\&)page=([0-9]+)/', '', $_SERVER["REQUEST_URI"]);
+$query = ""; // THIS IS BUG...
 	if ($query == "") {
 		$sw = preg_match('/'.$ver.'\/(a|f|k|u)/', $_SERVER["REQUEST_URI"]) ? "&" : "?";
 		$baseurl .= $sw . "page=";
@@ -385,7 +386,11 @@ function printCSS($mobile) {
 	return;
 }
 function getJavaScript() {
+	global $isAndroidOpera;
 	$out = file_get_contents("scripts.js");
+	if ($isAndroidOpera) {
+		$out .= "\n".file_get_contents("operacam.js");
+	}
 	$out = preg_replace('/\/\* (.+) \*\//', '', $out);
 	$out = preg_replace('/(\n|\t)/', '', $out);
 	$out = preg_replace('/, /', ',', $out);

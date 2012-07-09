@@ -79,6 +79,8 @@ if ($camdata) {
 	/* fillin */
 	if (isset($_GET['fillbody'])) {
 		$fillBody = htmlspecialchars($_GET['fillbody']);
+	} else {
+		$fillBody = '';
 	}
 
 	/* get Parameter */
@@ -231,14 +233,14 @@ if ($login) {
 <?php
 	if ($sata != '') { print '<span id="mail"><a href="mailto:'.$password.'@h.hatena.ne.jp?subject='.$sata.'">メールで送る</a></span>';; }
 	if ($rtinfo) { print '<span id="mail"><a href="mailto:'.$password.'.'.$modeparam.'@h.hatena.ne.jp?subject='.$sata.'">メールで返信する</a></span>'; }
-	if ($isAndroid) { print '<img src="search_kamaboko.gif" onClick="popupCam()">'; }
+	if ($isAndroidOpera) { print '<img src="search_kamaboko.gif" onClick="popupCam()">'; }
 ?>
 </form><hr>
 <?php
 }
 /* ($login) */
-if ($amazblock) { print $amazblock; }
-if ($urlkeyblock) { print $urlkeyblock; }
+if (isset($amazblock) && $amazblock) { print $amazblock; }
+if (isset($urlkeyblock) && $urlkeyblock) { print $urlkeyblock; }
 print $out;
 if ($mobile) { print "<hr>"; }
 if ($pagenavi) { printPageNavigator($page); }
@@ -262,33 +264,10 @@ $s = <<<EOM
 </div>
 <p id="copy">&copy; 2010-2012 kokuda.org (Akkie)</p>
 EOM;
-	if ($isAndroid) {
-		$s .= <<<EOM
-<div id="popupCam" class="keyPicker" style="display:none;">
-	<div class="keyPickerWrapper">
-		<div class="keyPickerBody">
-			<video autoplay id="camwindow"></video>
-			<div id="campreview"></div>
-			<img src="dummy.gif" id="campreviewimage" style="display:none;">
-			<div id="camcheese"><input type="button" onclick="cheese()" value="さつえい" style="width:100%;height:30px;"></div>
-			<div id="camsave" style="display:none;">
-				<input type="button" onclick="save()" value="けってい" style="width:100%;height:30px;"><br><br>
-				<input type="button" onclick="startCam()" value="もっかい" style="width:100%;height:30px;">
-			</div>
-			<div style="display:none;">
-				<canvas id="camcanvas"></canvas>
-				<audio src="cheese.ogg" preload="auto" id="camsound"></audio>
-			</div>
-		</div>
-		<div id="close"><a href="javascript:void(0);" onclick="popupCam()">とじる</a></div>
-	</div>
-</div>
-EOM;
+	if ($isAndroidOpera) {
+		$s .= getOperacamBoxHTML();
 	}
 	print preg_replace('/(\n|\t)/', '', $s);
 	print ($mobile != 1) ? '<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script><script type="text/javascript">'.getJavaScript().'</script>' : '';
-	if ($isAndroid) {
-		print '<script src="android-opera-cam.js" type="text/javascript"></script><span id="popupCamStat" class="none"></span>';
-	}
 ?>
 </body></html>

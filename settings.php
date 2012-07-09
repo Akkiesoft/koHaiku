@@ -10,6 +10,11 @@
 	require_once 'init.php';
 	require_once 'func.php';
 
+	if (!$usedb) {
+		print "This koHaiku is not use database. NGID and NG keyword functions are disabled.";
+		exit;
+	}
+
 	if (isset($_POST['NG'])) {
 		/* 設定 */
 		$ngid  = htmlspecialchars($_POST['ngid']);
