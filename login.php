@@ -1,4 +1,7 @@
 <?php
+	require_once 'init.php';
+	require_once 'func.php';
+
 	if (isset($_GET['op'])) {
 		$op = htmlspecialchars($_GET['op']);
 		if ($op == 'logout') {
@@ -7,21 +10,9 @@
 		}
 	}
 
-	$username = '';
-	$password = '';
-	$login = 0;
-
-	if (isset($_COOKIE["koHaiku"])) {
-		$cookie = $_COOKIE["koHaiku"];
-		list($username,$password) = explode(",", $_COOKIE['koHaiku']);
-		$login = 1;
-	}
-	if ($username && $password) {
+	if ($login) {
 		header("Location:./");
 	}
-
-	require_once 'init.php';
-	require_once 'func.php';
 
 	$result = "";
 	if (isset($_POST['submit'])) {
@@ -30,7 +21,7 @@
 		$req = new HTTP_Request();
 		$req->setMethod(HTTP_REQUEST_METHOD_GET);
 		$req->setBasicAuth($username, $password);
-		$req->setURL('http://h.hatena.ne.jp/api/statuses/friends_timeline.xml');
+		$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline.xml');
 		$res = $req->sendRequest();
 		if(PEAR::isError($res)) {
 			print $res->getMessage();

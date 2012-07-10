@@ -5,6 +5,17 @@
 
 	require_once('config.php');
 
+	$username = '';
+	$password = '';
+	$login = 0;
+	
+	// Check login (Cookie)
+	if (isset($_COOKIE["koHaiku"])) {
+		$cookie = $_COOKIE["koHaiku"];
+		list($username,$password) = explode(",", $_COOKIE['koHaiku']);
+		$login = 1;
+	}
+
 	// Check UA ( 0==PC/touch, 1==Mobile, 2==DSi )
 	$ua = $_SERVER['HTTP_USER_AGENT'];
 	$pattern = '/(DoCoMo)|(UP\.Browser)|(J-PHONE)|(Vodafone)|(Softbank)/';

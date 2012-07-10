@@ -1,13 +1,10 @@
 <?php
-	if (isset($_COOKIE["koHaiku"])) {
-		$cookie = $_COOKIE["koHaiku"];
-		list($username,$password) = explode(",", $_COOKIE['koHaiku']);
-		$login = 1;
-	} else {
-		header('Location:login.php');
-	}
 
 	require_once 'init.php';
+	if (!$login) {
+		header('Location:login.php');
+		exit;
+	}
 	require_once 'func.php';
 
 	if (!$usedb) {
@@ -60,7 +57,7 @@
 </form>
 
 <?php if ($mobile) { print "<hr>";printKoHaikuFooter(); } ?>
-<p id="copy">&copy; 2011 kokuda.org (Akkie)</p>
+<p id="copy">&copy; 2010-2012 kokuda.org (Akkie)</p>
 <?php
 	print (!$mobile) ? '<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script><script type="text/javascript">'.getJavaScript().'</script>' : '';
 ?>

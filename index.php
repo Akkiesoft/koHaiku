@@ -1,13 +1,4 @@
 <?php
-
-	if (isset($_COOKIE["koHaiku"])) {
-		$cookie = $_COOKIE["koHaiku"];
-		list($username,$password) = explode(",", $_COOKIE['koHaiku']);
-		$login = 1;
-	} else {
-		$login = 0;
-	}
-
 	require_once 'init.php';
 	require_once 'func.php';
 
