@@ -103,17 +103,10 @@ if ($camdata) {
 		$out = getStarData($modeparam);
 	}
 	else if ($mode == 'delete') {
-<<<<<<< HEAD
-		$entry = getEntry($modeparam);
-		if (substr($entry, 0, 1) == '<') {
-			$entry = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $entry);
-			$out = parseEntry(simplexml_load_string($entry), "usr", 'delete');
-=======
 		$json = getEntry($modeparam);
 		if (substr($json, 0, 1) == '{') {
 			$json = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $json);
 			$out = parseEntry(json_decode($json), "usr", 'delete');
->>>>>>> JSON-type
 			$out = 
 				'<p>次のエントリを削除します。良ければOKボタンを押して下さい。</p>' . $out . '<form action="' .
 				$script . '" method="post"><input type="hidden" name="eid" value="' . $modeparam .
