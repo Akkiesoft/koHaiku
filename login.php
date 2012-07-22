@@ -21,7 +21,7 @@
 		$req = new HTTP_Request();
 		$req->setMethod(HTTP_REQUEST_METHOD_GET);
 		$req->setBasicAuth($username, $password);
-		$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline.xml');
+		$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline.json');
 		$res = $req->sendRequest();
 		if(PEAR::isError($res)) {
 			print $res->getMessage();

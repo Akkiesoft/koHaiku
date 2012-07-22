@@ -82,17 +82,17 @@ if ($camdata) {
 
 	if ($mode == 'entry') {
 		/* a Entry page */
-		$entry = getEntry($modeparam);
-		if (substr($entry, 0, 1) == '<') {
-			$entry = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $entry);
-			$xml = simplexml_load_string($entry);
+		$json = getEntry($modeparam);
+		if (substr($json, 0, 1) == '{') {
+			$json = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $json);
+			$entry = json_decode($json);
 			$skipflag = 0;
-			if (mb_strpos($ngkey, $xml->keyword) !== FALSE) { $skipflag++; }
-			if (mb_strpos($ngid, $xml->user->screen_name) !== FALSE) { $skipflag++; }
+			if (mb_strpos($ngkey, $entry->keyword) !== FALSE) { $skipflag++; }
+			if (mb_strpos($ngid, $entry->user->screen_name) !== FALSE) { $skipflag++; }
 			if (!$skipflag) {
 				$haikuform = 1;
-				$out = parseEntry($xml, "pub", 'nospamchk');
-				$rtinfo = '<input type="hidden" name="sata" value="'. $xml->keyword .'" /><input type="hidden" name="rtid" value="'. $modeparam .'" />';
+				$out = parseEntry($entry, "pub", 'nospamchk');
+				$rtinfo = '<input type="hidden" name="sata" value="'. $entry->keyword .'" /><input type="hidden" name="rtid" value="'. $modeparam .'" />';
 			}
 		} else {
 			$out = "エントリー取得エラー。";
@@ -103,10 +103,17 @@ if ($camdata) {
 		$out = getStarData($modeparam);
 	}
 	else if ($mode == 'delete') {
+<<<<<<< HEAD
 		$entry = getEntry($modeparam);
 		if (substr($entry, 0, 1) == '<') {
 			$entry = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $entry);
 			$out = parseEntry(simplexml_load_string($entry), "usr", 'delete');
+=======
+		$json = getEntry($modeparam);
+		if (substr($json, 0, 1) == '{') {
+			$json = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', ' ', $json);
+			$out = parseEntry(json_decode($json), "usr", 'delete');
+>>>>>>> JSON-type
 			$out = 
 				'<p>次のエントリを削除します。良ければOKボタンを押して下さい。</p>' . $out . '<form action="' .
 				$script . '" method="post"><input type="hidden" name="eid" value="' . $modeparam .
@@ -146,24 +153,24 @@ if ($camdata) {
 		if ($mode == 'user') {
 			/* User Entries */
 			$showProfile = "id:".$modeparam;
-			$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline/'.$modeparam.'.xml?body_formats=haiku');
+			$req->setURL('http://h.hatena.ne.jp/api/statuses/user_timeline/'.$modeparam.'.json?body_formats=haiku');
 		}
 		else if ($mode == 'following') {
 			/* Following Entries */
 			$showProfile = "id:".$modeparam;
 			if (!$modeparam) { die('ユーザ名が指定されていません。<a href="'.$script.'">もどる</a>'); }
-			$req->setURL('http://h.hatena.ne.jp/api/statuses/friends_timeline/'.$modeparam.'.xml?body_formats=haiku');
+			$req->setURL('http://h.hatena.ne.jp/api/statuses/friends_timeline/'.$modeparam.'.json?body_formats=haiku');
 		}
 		else if ($mode == 'key') {
 			/* Keyword */
 			$showProfile = $modeparam;
 			$keyurl = rawurlencode($modeparam);
-			$req->setURL('http://h.hatena.ne.jp/api/statuses/keyword_timeline/'.$keyurl.'.xml?body_formats=haiku');
+			$req->setURL('http://h.hatena.ne.jp/api/statuses/keyword_timeline/'.$keyurl.'.json?body_formats=haiku');
 			$sata = $modeparam;
 			$color = 'key';
 		} else {
 			/* Public Timeline */
-			$req->setURL('http://h.hatena.ne.jp/api/statuses/public_timeline.xml?body_formats=haiku');
+			$req->setURL('http://h.hatena.ne.jp/api/statuses/public_timeline.json?body_formats=haiku');
 			$color = 'pub';
 		}
 		if (isset($_GET['page']) && $_GET['page']) {
@@ -182,7 +189,7 @@ if ($camdata) {
 			/*新規キーワード  */
 		}
 		else {
-			die('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"></head><body>XML取得エラー！: '.$req->getResponseCode()."</body></html>");
+			die('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"></head><body>データ取得エラー！: '.$req->getResponseCode()."</body></html>");
 		}
 	}
 ?>
