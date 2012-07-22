@@ -78,7 +78,6 @@ if ($camdata) {
 	if (isset($_GET['mode'])) {
 		$mode      = htmlspecialchars($_GET['mode']);
 		$modeparam = htmlspecialchars($_GET['param']);
-		if (preg_match('/\/$/', $modeparam)) { $modeparam = substr($modeparam, 0, -1); }
 	}
 
 	if ($mode == 'entry') {
