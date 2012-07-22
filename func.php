@@ -322,24 +322,19 @@ function printKoHaikuFooter() {
 
 function printPageNavigator($pagenum)
 {
-	global $ver;
-	$baseurl = preg_replace('/(\?|\&)page=([0-9]+)/', '', $_SERVER["REQUEST_URI"]);
-$query = ""; // THIS IS BUG...
-	if ($query == "") {
-		$sw = preg_match('/'.$ver.'\/(a|f|k|u)/', $_SERVER["REQUEST_URI"]) ? "&" : "?";
-		$baseurl .= $sw . "page=";
-	} else {
-		// たぶんない
-		$baseurl .= "?$query&page=";
-	}
+	$baseurl = preg_replace('/\?page=([0-9]+)/', '', $_SERVER["REQUEST_URI"]);
 
 	print '<p style="text-align:center;">';
 	if ($pagenum != 1) {
-		print '<a href="'. $baseurl . ($pagenum-1) .'">←</a>';
+		if ($pagenum-1 == 1) {
+			print '<a href="'. $baseurl .'">←</a>';
+		} else {
+			print '<a href="'. $baseurl . '?page=' . ($pagenum-1) .'">←</a>';
+		}
 	}
 	print "(Page ".$pagenum.")";
 	if ($pagenum <= 100) {
-		print '<a href="'. $baseurl . ($pagenum+1) .'">→</a>';
+		print '<a href="'. $baseurl . '?page=' . ($pagenum+1) .'">→</a>';
 	}
 	print "</p>";
 	return;

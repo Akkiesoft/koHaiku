@@ -1,0 +1,18 @@
+# このディレクトリのphpファイルだけはキャッシュさせないようレスポンスヘッダに追加
+<Files ~ "\.(php)$">
+Header set Cache-Control "no-cache"
+Header set Pragma "no-cache"
+</Files>
+
+RewriteEngine on
+#RewriteOptions MaxRedirects=1
+RewriteBase /5820/
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^a/(.*) index.php?mode=album&param=$1 [QSA]
+RewriteRule ^e/(.*) index.php?mode=entry&param=$1 
+RewriteRule ^f/(.*) index.php?mode=following&param=$1 [QSA]
+RewriteRule ^k/(.*) index.php?mode=key&param=$1 [QSA] 
+RewriteRule ^u/(.*) index.php?mode=user&param=$1 [QSA] 
+RewriteRule ^star/(.*) index.php?mode=star&param=$1
+RewriteRule ^delete/(.*) index.php?mode=delete&param=$1 [L]
