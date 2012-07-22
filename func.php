@@ -12,7 +12,7 @@ function getEntry($entryid)
 	$req = new HTTP_Request();
 	$req->setMethod(HTTP_REQUEST_METHOD_GET);
 	$req->setBasicAuth($username, $password);
-	$req->setURL('http://h.hatena.ne.jp/api/statuses/show/'.$entryid.'.xml?body_formats=haiku');
+	$req->setURL('http://h.hatena.ne.jp/api/statuses/show/'.$entryid.'.json?body_formats=haiku');
 	$res = $req->sendRequest();
 	if(PEAR::isError($res)) {
 		return $res->getMessage();
@@ -109,12 +109,12 @@ EOM;
 	return $out;
 }
 
-function parseEntries($xml, $color = 'usr', $showProfile = 0)
+function parseEntries($json, $color = 'usr', $showProfile = 0)
 {
 	global $mobile, $ngid, $ngkey, $access_key_id, $secret_access_key;
 	/* %0x系キーワード対策 */
-	$rss = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', " ", $xml);
-	$rss = simplexml_load_string($rss);
+	$entries = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', " ", $json);
+	$entries = json_decode($entries);
 	$out = "";
 	$cnt = 0;
 	$bg = $color;
@@ -123,10 +123,10 @@ function parseEntries($xml, $color = 'usr', $showProfile = 0)
 	if ($showProfile) {
 		if ($color == 'usr' || ($color == 'key' && $match = preg_match('/^id\:([0-9A-Za-z-_]+)$/', $showProfile))) {
 			$id = substr($showProfile, 3);
-			$profile_xml = simplexml_load_file('http://h.hatena.ne.jp/api/friendships/show/id:'.$id.'.xml');
-			$nick = htmlspecialchars($profile_xml->name);
-			$icon = $profile_xml->profile_image_url;
-			$fans = $profile_xml->followers_count;
+			$profile = json_decode(file_get_contents('http://h.hatena.ne.jp/api/friendships/show/id:'.$id.'.json'));
+			$nick = htmlspecialchars($profile->name);
+			$icon = $profile->profile_image_url;
+			$fans = $profile->followers_count;
 			$ngided = '';
 			if ($ngid && mb_strpos($ngid, $id) !== FALSE) {
 				$icon = 'http://8639.tk/5819/baloon.gif';
@@ -166,7 +166,7 @@ function parseEntries($xml, $color = 'usr', $showProfile = 0)
 		}
 	}
 
-	foreach ($rss->status as $entry) {
+	foreach ($entries as $entry) {
 		if ($mobile) {
 			$bg = ($cnt++ % 2) ? 'white' : $color;
 		}
@@ -187,7 +187,7 @@ function deleteEntry($entryid)
 	$req  = new HTTP_Request();
 	$req->setMethod(HTTP_REQUEST_METHOD_POST);
 	$req->setBasicAuth($username, $password);
-	$req->setURL('http://h.hatena.ne.jp/api/statuses/destroy/'.$entryid.'.xml');
+	$req->setURL('http://h.hatena.ne.jp/api/statuses/destroy/'.$entryid.'.json');
 	$res = $req->sendRequest();
 	if(PEAR::isError($res)) {
 		return $res->getMessage();
@@ -216,7 +216,7 @@ function postEntry($keyword="", $status, $file, $rtid = 0)
 	if ($rtid) {
 		$req->addPostData('in_reply_to_status_id', $rtid);
 	}
-	$req->setURL('http://h.hatena.ne.jp/api/statuses/update.xml');
+	$req->setURL('http://h.hatena.ne.jp/api/statuses/update.json');
 	$res = $req->sendRequest();
 	if(PEAR::isError($res)) {
 		return $res->getMessage();
@@ -255,8 +255,8 @@ function getStarData($entryurl)
 		$starcount += $count;
 	}
 	preg_match('/(\w+)\/(\w+)/', $entryurl, $match);
-	$xml = getEntry($match[2]);
-	$out = parseEntry(simplexml_load_string($xml), "#eeefff", 'nostar');
+	$json = getEntry($match[2]);
+	$out = parseEntry(json_decode($json), "#eeefff", 'nostar');
 	$out .= <<<EOM
 <hr><p>■このエントリーについたスター($starcount)<br>$starout</p><p><small>※ブラウザの「戻る」機能で戻ってね</small></p>
 EOM;
@@ -346,9 +346,9 @@ function getKeywordList($mode, $user = "")
 	$req  = new HTTP_Request();
 	$req->setMethod(HTTP_REQUEST_METHOD_GET);
 	if ($mode == "fav") {
-		$req->setURL('http://h.hatena.ne.jp/api/statuses/keywords/'.$user.'.xml?without_related_keywords=1');
+		$req->setURL('http://h.hatena.ne.jp/api/statuses/keywords/'.$user.'.json?without_related_keywords=1');
 	} else if ($mode == "hot") {
-		$req->setURL('http://h.hatena.ne.jp/api/keywords/hot.xml?without_related_keywords=1');
+		$req->setURL('http://h.hatena.ne.jp/api/keywords/hot.json?without_related_keywords=1');
 	}
 	$res = $req->sendRequest();
 	if(PEAR::isError($res)) {
@@ -357,8 +357,8 @@ function getKeywordList($mode, $user = "")
 	$time = round((microtime(true) - $start_time) * 100) / 100;
 
 	$result = "<ul>";
-	$xml = simplexml_load_string($req->getResponseBody());
-	foreach($xml as $item) {
+	$items = json_decode($req->getResponseBody());
+	foreach($items as $item) {
 		$link = getKeywordURL($item->word);
 		$result .= "<li><a href=\"".$link."\">".$item->title."</a></li>";
 	}
