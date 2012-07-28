@@ -230,6 +230,7 @@ function getStarData($entryurl)
 	$starcount = 0;
 	$starinfo = file_get_contents('http://s.hatena.ne.jp/entry.json/?uri=http://h.hatena.ne.jp/'.$entryurl);
 	$starinfo = json_decode($starinfo);
+	if (empty($starinfo->entries)) { return "URLの指定が不正です。。"; }
 	$starout = "";
 	if (isset($starinfo->entries[0]->colored_stars)) {
 		foreach ($starinfo->entries[0]->colored_stars as $color) {
