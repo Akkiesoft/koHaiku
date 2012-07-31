@@ -4,10 +4,8 @@
 
 	$mode = '';
 	$sata = '';
-	$page = 1;
 	$rtinfo    = '';
 	$keyword   = '';
-	$pagenavi  = 0;
 	$haikuform = 0;
 	$lastentry_time = 0;
 
@@ -139,7 +137,6 @@ if ($camdata) {
 		$req = new HTTP_Request();
 		$req->setMethod(HTTP_REQUEST_METHOD_GET);
 		$color     = 'usr';		// Default(Pink)
-		$pagenavi  = 1;
 		$haikuform = 1;
 		$amazblock = '';
 		$showProfile = 0;
