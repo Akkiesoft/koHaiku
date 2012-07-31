@@ -109,12 +109,9 @@ EOM;
 	return $out;
 }
 
-function parseEntries($json, $color = 'usr', $showProfile = 0)
+function parseEntries($entries, $color = 'usr', $showProfile = 0)
 {
 	global $mobile, $ngid, $ngkey, $access_key_id, $secret_access_key;
-	/* %0x系キーワード対策 */
-	$entries = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', " ", $json);
-	$entries = json_decode($entries);
 	$out = "";
 	$cnt = 0;
 	$bg = $color;
@@ -230,7 +227,6 @@ function getStarData($entryurl)
 	$starcount = 0;
 	$starinfo = file_get_contents('http://s.hatena.ne.jp/entry.json/?uri=http://h.hatena.ne.jp/'.$entryurl);
 	$starinfo = json_decode($starinfo);
-	if (empty($starinfo->entries)) { return "URLの指定が不正です。。"; }
 	$starout = "";
 	if (isset($starinfo->entries[0]->colored_stars)) {
 		foreach ($starinfo->entries[0]->colored_stars as $color) {
@@ -321,22 +317,14 @@ function printKoHaikuFooter() {
 	return;
 }
 
-function printPageNavigator($pagenum)
+function printPageNavigator($entries)
 {
-	$baseurl = preg_replace('/\?page=([0-9]+)/', '', $_SERVER["REQUEST_URI"]);
+	$baseurl = preg_replace('/\?reftime=([-+,0-9]+)/', '', $_SERVER["REQUEST_URI"]);
+
+	$olderBase = '-'.strtotime($entries[count($entries)-1]->created_at).',1';
 
 	print '<p style="text-align:center;">';
-	if ($pagenum != 1) {
-		if ($pagenum-1 == 1) {
-			print '<a href="'. $baseurl .'">←</a>';
-		} else {
-			print '<a href="'. $baseurl . '?page=' . ($pagenum-1) .'">←</a>';
-		}
-	}
-	print "(Page ".$pagenum.")";
-	if ($pagenum <= 100) {
-		print '<a href="'. $baseurl . '?page=' . ($pagenum+1) .'">→</a>';
-	}
+	print '<a href="'. $baseurl . '?reftime='. $olderBase .'">過去のエントリーを見る</a><br><br>';
 	print "</p>";
 	return;
 }

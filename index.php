@@ -9,6 +9,7 @@
 	$keyword   = '';
 	$pagenavi  = 0;
 	$haikuform = 0;
+	$lastentry_time = 0;
 
 	if (isset($_POST['t8639'])) {
 		/* Post to Haiku! */
@@ -166,9 +167,9 @@ if ($camdata) {
 			$req->setURL('http://h.hatena.ne.jp/api/statuses/public_timeline.json?body_formats=haiku');
 			$color = 'pub';
 		}
-		if (isset($_GET['page']) && $_GET['page']) {
-			$page = htmlspecialchars($_GET['page']);
-			$req->addQueryString('page', $page);
+		if (isset($_GET['reftime']) && $_GET['reftime']) {
+			$reftime = htmlspecialchars($_GET['reftime']);
+			$req->addQueryString('reftime', $reftime);
 		}
 		$res = $req->sendRequest();
 		if(PEAR::isError($res)) {
@@ -176,7 +177,11 @@ if ($camdata) {
 		}
 		$ret = $req->getResponseCode();
 		if ($ret == 200) {
-			$out = parseEntries($req->getResponseBody(), $color, $showProfile);
+			$json = $req->getResponseBody();
+			/* %0x系キーワード対策 */
+			$json = preg_replace('/[\x00-\x09\x0b\x0c\x0e-\x1f]/', " ", $json);
+			$entries = json_decode($json);
+			$out = parseEntries($entries, $color, $showProfile);
 		}
 		else if ($ret == 500 && $mode == 'key') {
 			/*新規キーワード  */
@@ -232,7 +237,7 @@ if (isset($amazblock) && $amazblock) { print $amazblock; }
 if (isset($urlkeyblock) && $urlkeyblock) { print $urlkeyblock; }
 print $out;
 if ($mobile) { print "<hr>"; }
-if ($pagenavi) { printPageNavigator($page); }
+printPageNavigator($entries);
 if ($mobile == 1) { printKoHaikuFooter(); }
 $s = <<<EOM
 <div id="keyPicker" class="keyPicker" style="display:none;">
