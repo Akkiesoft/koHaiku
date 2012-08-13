@@ -319,12 +319,13 @@ function printKoHaikuFooter() {
 
 function printPageNavigator($entries)
 {
-	$baseurl = preg_replace('/\?reftime=([-+,0-9]+)/', '', $_SERVER["REQUEST_URI"]);
+	$baseurl = preg_replace('/(\?|\&)reftime=([-+,0-9]+)/', '', $_SERVER["REQUEST_URI"]);
+	$optstr = (strpos($baseurl, '?') === FALSE) ? '?' : '&';
 
 	$olderBase = '-'.strtotime($entries[count($entries)-1]->created_at).',1';
 
 	print '<p style="text-align:center;">';
-	print '<a href="'. $baseurl . '?reftime='. $olderBase .'">過去のエントリーを見る</a><br><br>';
+	print '<a href="'. $baseurl . $optstr . 'reftime='. $olderBase .'">過去のエントリーを見る</a><br><br>';
 	print "</p>";
 	return;
 }
