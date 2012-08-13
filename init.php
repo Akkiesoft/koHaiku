@@ -41,20 +41,21 @@
 	$ngkey = '';
 
 	if ($login && $usedb) {
-		/* DBÚ‘± */
+		/* DBæŽ¥ç¶š */
 		if (! $mysql = mysql_connect($dbaddr, $dbuser, $dbpass) ) {
-			print 'DB‚ÌÚ‘±‚ÉŽ¸”s‚µ‚Ü‚µ‚½cB';
+			print 'DBã®æŽ¥ç¶šã«å¤±æ•—ã—ã¾ã—ãŸâ€¦ã€‚';
 			exit;
 		}
 		mysql_select_db($dbname, $mysql);
 
-		$query = "select hatenaid, ngid,ngkey,DECODE(ngid,'kohaiku') as d_ngid, DECODE(ngkey,'kohaiku') as d_ngkey from kohaiku_ng where hatenaid = \"".$username.'"';
+		$query = "select DECODE(ngid,'kohaiku') as d_ngid, DECODE(ngkey,'kohaiku') as d_ngkey, kohaiku_settings.settings_json as json from kohaiku_ng join kohaiku_settings using(uid) where kohaiku_settings.hatenaid = \"".$username.'"';
 		$res = mysql_query($query, $mysql);
-		$NGSetting = mysql_fetch_object($res);
+		$data = mysql_fetch_object($res);
 		mysql_free_result($res);
 
-		$ngid = $NGSetting->d_ngid;
-		$ngkey = $NGSetting->d_ngkey;
+		$ngid = $data->d_ngid;
+		$ngkey = $data->d_ngkey;
+		$settings = json_decode($data->json);
 	}
 
 	$mobilehead = '';
