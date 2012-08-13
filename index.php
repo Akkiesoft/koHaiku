@@ -6,6 +6,7 @@
 	$sata = '';
 	$rtinfo    = '';
 	$keyword   = '';
+	$pagenavi  = 0;
 	$haikuform = 0;
 	$lastentry_time = 0;
 
@@ -137,6 +138,7 @@ if ($camdata) {
 		$req = new HTTP_Request();
 		$req->setMethod(HTTP_REQUEST_METHOD_GET);
 		$color     = 'usr';		// Default(Pink)
+		$pagenavi  = 1;
 		$haikuform = 1;
 		$amazblock = '';
 		$showProfile = 0;
@@ -234,7 +236,7 @@ if (isset($amazblock) && $amazblock) { print $amazblock; }
 if (isset($urlkeyblock) && $urlkeyblock) { print $urlkeyblock; }
 print $out;
 if ($mobile) { print "<hr>"; }
-printPageNavigator($entries);
+if ($pagenavi) { printPageNavigator($entries); }
 if ($mobile == 1) { printKoHaikuFooter(); }
 $s = <<<EOM
 <div id="keyPicker" class="keyPicker" style="display:none;">
