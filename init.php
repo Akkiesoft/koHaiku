@@ -31,7 +31,7 @@
 	$isAndroidOpera = 0;
 	if ($isAndroid) {
 		$pattern = '/(Opera Mobi)/';
-		if (preg_match($pattern, $ua)) {
+		if (preg_match($pattern, $ua) && $useOperaCam) {
 			$isAndroidOpera = 1;
 			include('operacam.php');
 		}
