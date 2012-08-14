@@ -44,25 +44,11 @@
 
 	if ($login && $usedb) {
 		/* DB接続 */
-<<<<<<< HEAD
-		if (! $mysql = mysql_connect($dbaddr, $dbuser, $dbpass) ) {
-=======
 		if (! $mysql = mysqli_connect($dbaddr, $dbuser, $dbpass, $dbname) ) {
->>>>>>> Change SQL structures and modify settings screen.
 			print 'DBの接続に失敗しました…。';
 			exit;
 		}
 
-<<<<<<< HEAD
-		$query = "select DECODE(ngid,'kohaiku') as d_ngid, DECODE(ngkey,'kohaiku') as d_ngkey, kohaiku_settings.settings_json as json from kohaiku_ng join kohaiku_settings using(uid) where kohaiku_settings.hatenaid = \"".$username.'"';
-		$res = mysql_query($query, $mysql);
-		$data = mysql_fetch_object($res);
-		mysql_free_result($res);
-
-		$ngid = $data->d_ngid;
-		$ngkey = $data->d_ngkey;
-		$settings = json_decode($data->json);
-=======
 		$query = "select hatenaid, DECODE(ngid,'kohaiku') as ngid, DECODE(ngkey,'kohaiku') as ngkey, json as json from kohaiku where hatenaid = \"".$username.'"';
 		$res = mysqli_query($mysql, $query);
 		$settings = mysqli_fetch_object($res);
@@ -74,7 +60,6 @@
 		}
 		mysqli_free_result($res);
 		mysqli_close($mysql);
->>>>>>> Change SQL structures and modify settings screen.
 	}
 
 	$mobilehead = '';
