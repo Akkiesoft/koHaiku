@@ -1,43 +1,41 @@
 <?php
-
 	require_once 'init.php';
 	if (!$login) {
 		header('Location:login.php');
 		exit;
 	}
-	require_once 'func.php';
-
 	if (!$usedb) {
 		print "This koHaiku is not use database. NGID and NG keyword functions are disabled.";
 		exit;
 	}
+	require_once 'func.php';
 
-	if (isset($_POST['NG'])) {
+	if (isset($_POST['setting'])) {
 		/* 設定 */
+		if (! $mysql = mysqli_connect($dbaddr, $dbuser, $dbpass, $dbname) ) {
+			print 'DBの接続に失敗しました…。';
+			exit;
+		}
+
 		$ngid  = htmlspecialchars($_POST['ngid']);
 		$ngkey = htmlspecialchars($_POST['ngkey']);
+		$json = json_encode(array(
+			'showpict' => (isset($_POST['opt_showpict'])) ? htmlspecialchars($_POST['opt_showpict']) : '0'
+		));
 
-		if (!$NGSetting) {
+		if (!$settings) {
 			/* 新規 */
-			$param  = "'" . $username . "', ENCODE('" . $ngid . "','kohaiku'), ENCODE('" . $ngkey . "','kohaiku')";
-			mysql_query('insert into kohaiku_ng values('.$param.')', $mysql);
+			$param  = "'" . $username . "', ENCODE('" . $ngid . "','kohaiku'), ENCODE('" . $ngkey . "','kohaiku'), '" . $json . "'";
+			mysqli_query($mysql, 'insert into kohaiku values('.$param.')');
 		} else {
 			/* update */
-			$param  = "ngid = ENCODE('" . $ngid . "','kohaiku'), ngkey = ENCODE('" . $ngkey . "','kohaiku')";
-			mysql_query('update kohaiku_ng set '.$param.' where hatenaid = "'.$username.'"', $mysql);
+			$param  = "ngid = ENCODE('" . $ngid . "','kohaiku'), ngkey = ENCODE('" . $ngkey . "','kohaiku'), json = '" . $json . "'";
+			mysqli_query($mysql, 'update kohaiku set '.$param.' where hatenaid = "'.$username.'"');
 		}
-		mysql_close($mysql);
+		mysqli_close($mysql);
 		header('Location:settings.php');
 		exit;
 	}
-
-	/* 取得 */
-	$ngid = $NGSetting->d_ngid;
-	$ngkey = $NGSetting->d_ngkey;
-
-	mysql_close($mysql);
-
-	$mobilehead = (!$mobile) ? '<meta name="viewport" content="width=device-width, minimum-scale=1.0"><meta name="format-detection" content = "telephone=no"><link rel="apple-touch-icon" href="'.$script.'iPhoneIcon.png">'."\n" : '';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -47,13 +45,26 @@
 </head>
 <body>
 <?php printKoHaikuHeader(); ?>
-<h2>設定</h2>
+<div id="ibox">設定</div>
 <form action="settings.php" method="post">
-<p>NG ID(改行で区切る)</p>
+<div class="entry pub"><div class="entryuser">
+NG ID(改行で区切る)<br>
 <textarea name="ngid" style="width:90%;height:10em;"><?php print $ngid; ?></textarea>
+</div></div>
+<div class="entry pub"><div class="entryuser">
 <p>NG Keyword(改行で区切る)</p>
 <textarea name="ngkey" style="width:90%;height:10em;"><?php print $ngkey; ?></textarea>
-<p><input type="submit" name="NG"></p>
+</div></div>
+<div class="entry pub"><div class="entryuser">
+<p>画像の表示方法</p>
+<label><input type="radio" name="opt_showpict" value="0"<?php if($opt_showpict=='0'){print " checked";} ?>> 通常表示</label><br>
+<label><input type="radio" name="opt_showpict" value="1"<?php if($opt_showpict=='1'){print " checked";} ?>> サムネイル表示</label><br>
+<label><input type="radio" name="opt_showpict" value="2"<?php if($opt_showpict=='2'){print " checked";} ?>> リンク</label><br>
+※サムネイル表示はフォトライフのみ対応。その他の画像はリンクになります<br>※ケータイは通常表示を選択してもサムネイル表示になります
+</div></div>
+<div class="entry pub"><div class="entryuser">
+<input type="submit" name="setting">
+</div></div>
 </form>
 
 <?php if ($mobile) { print "<hr>";printKoHaikuFooter(); } ?>
