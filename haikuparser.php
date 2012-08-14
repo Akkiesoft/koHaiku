@@ -11,6 +11,40 @@ function getKeywordURL($keyword) {
 	return $out;
 }
 
+function pictureLink($imgurl, $alt = '', $linkto, $isAvailableThumbnail = 0) {
+	global $mobile, $opt_showpict;
+	$outType = $opt_showpict;
+
+	if ($isAvailableThumbnail == '1' && (($opt_showpict == '0' && $mobile) || $opt_showpict == '1')) {
+		/* Hatena */
+		$imgurl = substr($imgurl, 0, -4) . '_120.jpg';
+	}
+
+	if ($opt_showpict == '0' && $mobile) {
+		$outType = ($isAvailableThumbnail) ? 1 : 2;
+	}
+	if ($opt_showpict == '1') {
+		if ($isAvailableThumbnail) { $outType = 1; }
+		else {
+			$outType = ($mobile) ? 2 : 0;
+		}
+	}
+	switch ($outType) {
+		case '0':
+		case '1':
+			$out  = '<a href="'.$linkto.'"><img src="'.$imgurl.'" alt="'.$alt.'"></a>';
+			break;
+		case '2':
+			if ($mobile) {
+				$out = "<a href=\"{$linkto}\">(画像を開く)</a>";
+			} else {
+				$out = "<span class=\"picopen\" onclick=\"showImage('{$linkto}', '{$imgurl}', '{$alt}', this)\"><noscript><a href=\"{$linkto}\"></noscript>(画像を開く)<noscript></a></noscript></span>";
+			}
+			break;
+	}
+	return $out;
+}
+
 function fotolifeSintax($matches) {
 	global $mobile;
 	$alt     = $matches[0];
@@ -23,18 +57,10 @@ function fotolifeSintax($matches) {
 	$ext     = 'jpg';
 	if ($type == 'g') { $ext = 'gif'; }
 	else if ($type == 'p') { $ext = 'png'; }
-
-	// Default(Image)
-	$mobext  = '';
-	if ($mobile) {
-		$mobext  = '_120';
-		$ext     = 'jpg';
-	}
-
 	$link = 'http://f.hatena.ne.jp/'.$id.'/'.$date.$time;
-	$img  = 'http://cdn-ak.f.st-hatena.com/images/fotolife/'.$initial.'/'.$id.'/'.$date.'/'.$date.$time.$mobext.'.'.$ext;
-$out = "<span class=\"picopen\" onclick=\"showImage('{$link}', '{$img}', '{$alt}', this)\">(画像を開く)</span>";
-//	$out  = '<a href="'.$link.'"><img src="'.$img.'" alt="'.$alt.'"></a>';
+	$img  = 'http://cdn-ak.f.st-hatena.com/images/fotolife/'.$initial.'/'.$id.'/'.$date.'/'.$date.$time.'.'.$ext;
+
+	$out = pictureLink($img, $alt, $link, 1);
 
 	if ($type == 'f' && $mode == ':movie' && !$mobile) {
 		// Movie(Mobile以外のmovie)
@@ -75,18 +101,6 @@ EOM;
 	return $out;
 }
 
-function photozou($matches) {
-	global $mobile;
-	$xml = simplexml_load_file('http://api.photozou.jp/rest/photo_info?photo_id='.$matches[3]);
-	$photo = $xml->info->photo;
-	if ($mobile) {
-		$out = '<a href="'.$photo->url.'"><img src="'.$photo->thumbnail_image_url.'" alt="'.$photo->photo_title.'"></a>';
-	} else {
-		$out = '<a href="'.$photo->url.'"><img src="'.$photo->image_url.'" alt="'.$photo->photo_title.'"></a>';
-	}
-	return $out;
-}
-
 function amazonLink($matches) {
 	global $baseurl, $mobile, $access_key_id, $secret_access_key;
 	$asin = $matches[2];
@@ -120,7 +134,7 @@ function amazonLink($matches) {
 }
 
 function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1) {
-	global $baseurl, $script, $dbg;
+	global $baseurl, $script, $dbg, $opt_showpict;
 
 	$out = "";
 	$picLinkCount = 4;
@@ -159,46 +173,55 @@ function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1) {
 		/* 画像 */
 		if (0 < $picLinkCount) {
 			// フォト蔵
-			$result = preg_replace_callback(
-				'/(http:\/\/photozou\.jp\/photo\/show\/)([0-9]+)\/([0-9]+)/',
-				"photozou", $match
-			);
-			if ($result != $match) {
-				$text = substr_replace($text, $result, $offset, strlen($match));
-				$shift += strlen($result) - strlen($match);
+			if (preg_match('/(http:\/\/photozou\.jp\/photo\/show\/)([0-9]+)\/([0-9]+)/', $match, $imgmatch)) {
+				$xml    = simplexml_load_file('http://api.photozou.jp/rest/photo_info?photo_id='.$imgmatch[3]);
+				$photo  = $xml->info->photo;
+				$imgurl = ($mobile || $opt_showpict == '1')  ? $photo->thumbnail_image_url : $photo->image_url;
+				$text = substr_replace(
+					$text,
+					pictureLink($imgurl, $photo->photo_title, $photo->url, 2),
+					$offset, strlen($match));
+				$shift += strlen($replace) - strlen($match);
 				$picLinkCount--;
 				continue;
 			}
 
-			$pattern = array(); $replace = array();
 			// fotolife
-			$pattern[] = '/(http:\/\/(img\.f\.hatena\.ne\.jp|cdn\.f\.st-hatena\.com|cdn-ak\.f\.st-hatena\.com)\/images\/fotolife\/)([-_a-zA-Z0-9]+)\/([-_a-zA-Z0-9]+)\/([0-9]+)\/([0-9]+)\.(jpg|gif|png)/';
-			if ($mobile) {
-				$replace[] = '<a href="\\0"><img src="http://\\2/images/fotolife/\\3/\\4/\\5/\\6_120.jpg"></a>';
-			} else {
-		//		$replace[] = '<a href="\\0"><img src="\\0"></a>';
-				$replace[] = "<span class=\"picopen\" onclick=\"showImage('\\0', '\\0', '', this)\">(画像を開く)</span>";
+			$pattern = '/(http:\/\/(img\.f\.hatena\.ne\.jp|cdn\.f\.st-hatena\.com|cdn-ak\.f\.st-hatena\.com)\/images\/fotolife\/)([-_a-zA-Z0-9]+)\/([-_a-zA-Z0-9]+)\/([0-9]+)\/([0-9]+)\.(jpg|gif|png)/';
+			if (preg_match($pattern, $match)) {
+				$replace = pictureLink($match, $match, $match, 1);
+				$text = substr_replace($text, $replace, $offset, strlen($match));
+				$shift += strlen($replace) - strlen($match);
+				$picLinkCount--;
+				continue;
 			}
+
 			// yfrog
-			$pattern[] = '/(http:\/\/yfrog\.com\/)([0-9A-Za-z]+)/';
-			$opt = ($mobile) ? '.th.jpg' : ':iphone';
-			$replace[] = '<a href="http://yfrog.com/\\2"><img src="http://yfrog.com/\\2'.$opt.'" alt="yfrog:\\2"></a>';
+			if (preg_match('/(http:\/\/yfrog\.com\/)([0-9A-Za-z]+)/', $match, $imgmatch)) {
+				$imgurl = "http://yfrog.com/{$imgmatch[2]}";
+				if ($mobile || $opt_showpict == '1') {
+					$replace = pictureLink($imgurl.":small", "yflog:{$imgmatch[2]}", $imgurl, 2);
+				} else {
+					$replace = pictureLink($imgurl.":iphone", "yflog:{$imgmatch[2]}", $imgurl, 2);
+				}
+				$text = substr_replace($text, $replace, $offset, strlen($match));
+				$shift += strlen($replace) - strlen($match);
+				$picLinkCount--;
+				continue;
+			}
+
 			// Twitpic
-			$pattern[] = '/(http:\/\/twitpic\.com\/)([0-9A-Za-z]+)/';
-			$replace[] = '<a href="\\0"><img src="http://twitpic.com/show/thumb/\\2" alt="twitpic:\\2"></a>';
-			$result = preg_replace($pattern, $replace, $match);
-			if ($result != $match) {
-				$text = substr_replace($text, $result, $offset, strlen($match));
-				$shift += strlen($result) - strlen($match);
+			if (preg_match('/(http:\/\/twitpic\.com\/)([0-9A-Za-z]+)/', $match, $imgmatch)) {
+				$replace = pictureLink("http://twitpic.com/show/thumb/{$imgmatch[2]}", "twitpic:{$imgmatch[2]}", $match, 2);
+				$text = substr_replace($text, $replace, $offset, strlen($match));
+				$shift += strlen($replace) - strlen($match);
 				$picLinkCount--;
 				continue;
 			}
 
 			// 普通の画像URL
 			if (preg_match('/\.(jpg|jpeg|gif|png|JPG|JPEG|GIF|PNG)$/', $match)) {
-				$replace = ($mobile) ? '<a href="'.$match.'">(画像)</a>' : '<a href="'.$match.'"><img src="'.$match.'" alt="'.$match.'"></a>';
-if (!$mobile)
-$replace = "<span class=\"picopen\" onclick=\"showImage('$match', '$match', '', this)\">(画像を開く)</span>";
+				$replace = pictureLink($match, $match, $match, 0);
 				$text = substr_replace($text, $replace, $offset, strlen($match));
 				$shift += strlen($replace) - strlen($match);
 				$picLinkCount--;
