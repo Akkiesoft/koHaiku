@@ -226,7 +226,7 @@ if ($login) {
 <?php
 	if ($sata != '') { print '<span id="mail"><a href="mailto:'.$password.'@h.hatena.ne.jp?subject='.$sata.'">メールで送る</a></span>';; }
 	if ($rtinfo) { print '<span id="mail"><a href="mailto:'.$password.'.'.$modeparam.'@h.hatena.ne.jp?subject='.$sata.'">メールで返信する</a></span>'; }
-	if ($isAndroidOpera) { print '<img src="search_kamaboko.gif" onClick="popupCam()">'; }
+	if ($isAndroidOpera) { print '<img src="camera.gif" onClick="popupCam()">'; }
 ?>
 </form><hr>
 <?php
