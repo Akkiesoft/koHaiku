@@ -21,7 +21,18 @@
 			$keyword = "id:".urlencode($username);
 		}
 		$text = (isset($_POST['sas'])) ? $_POST['sas'] : '';
-		$file = (isset($_FILE['file'])) ? $_FILE['file'] : '';
+		$file = (isset($_FILES['file'])) ? $_FILES['file'] : '';
+if ($file) {
+	$camfilename = 'qbtmp/'.basename($file['name']);
+	if (!move_uploaded_file($file['tmp_name'], $camfilename) {
+		$file = array(
+			type=>$file['type'],
+			tmp_name=>$camfilename
+		);
+	} else {
+		$file = '';
+	}
+}
 		$camdata = (isset($_POST['camdata'])) ? $_POST['camdata'] : '';
 if ($camdata) {
 	$rawcamdata = base64_decode(substr($camdata, 22));
@@ -47,7 +58,7 @@ if ($camdata) {
 				postEntry($keyword, $text, $file);
 			}
 		}
-if ($camdata) {
+if ($camdata || $file) {
 	unlink($camfilename);
 }
 		header('Location:'.$script.$opt);
