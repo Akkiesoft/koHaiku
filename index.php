@@ -22,7 +22,6 @@
 		}
 		$text = (isset($_POST['sas'])) ? $_POST['sas'] : '';
 		$file = (isset($_FILES['file'])) ? $_FILES['file'] : '';
-$file = '';
 $camfilename = '';
 $camimagetype = '';
 if ($file) {
