@@ -218,7 +218,7 @@ if ($login) {
 		}
 ?>
 <textarea onkeyup="resize_textarea(event)"  name="sas" rows="3" id="status" placeholder="本文"><?php print $fillBody; ?></textarea><br>
-<?php if ($isAndroid) {  ?>
+<?php if (!$mobile) {  ?>
 <input type="file" accept="image/*" capture="camera" style="margin:0 0 20px 0;" name="file"></input>
 <input type="hidden" name="camdata">
 <?php } ?>
