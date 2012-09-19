@@ -22,15 +22,14 @@
 		}
 		$text = (isset($_POST['sas'])) ? $_POST['sas'] : '';
 		$file = (isset($_FILES['file'])) ? $_FILES['file'] : '';
+$file = '';
+$camfilename = '';
+$camimagetype = '';
 if ($file) {
 	$camfilename = 'qbtmp/'.basename($file['name']);
-	if (!move_uploaded_file($file['tmp_name'], $camfilename) {
-		$file = array(
-			type=>$file['type'],
-			tmp_name=>$camfilename
-		);
-	} else {
-		$file = '';
+	$camimagetype = $file['type'];
+	if (!move_uploaded_file($file['tmp_name'], $camfilename)) {
+		$camfilename='';
 	}
 }
 		$camdata = (isset($_POST['camdata'])) ? $_POST['camdata'] : '';
@@ -40,11 +39,14 @@ if ($camdata) {
 	$hndl = imagecreatefromstring($rawcamdata);
 	if ($hndl) {
 		$camfilename = 'qbtmp/'.time().'.jpg';
+		$camimagetype = 'image/jpeg';
 		imagejpeg($hndl, $camfilename, 90);
 	}
+}
+if ($camfilename) {
 	$file = array(
-		type=>'image/jpeg',
-		tmp_name=>$camfilename
+		'type'     => $camimagetype,
+		'tmp_name' => $camfilename
 	);
 }
 		$opt = getKeywordURL($keyword);
@@ -214,7 +216,7 @@ printKoHaikuHeader();
 
 if ($login) {
 	if ($haikuform) {
-		$multiform = ($isAndroid) ? ' enctype="multipart/form-data"' : '';
+		$multiform = (!$mobile) ? ' enctype="multipart/form-data"' : '';
 	}
 ?>
 <form action="./" method="POST" id="haikuForm" name="haikuForm"<?php print $multiform; ?>>
@@ -229,8 +231,9 @@ if ($login) {
 		}
 ?>
 <textarea onkeyup="resize_textarea(event)"  name="sas" rows="3" id="status" placeholder="本文"><?php print $fillBody; ?></textarea><br>
-<?php if (!$mobile) {  ?>
-<input type="file" accept="image/*" capture="camera" style="margin:0 0 20px 0;" name="file"></input>
+<?php if (!$mobile) { 
+/* ccept="image/*" capture="camera" */ ?>
+<input type="file" style="margin:0 0 20px 0;" name="file"></input>
 <input type="hidden" name="camdata">
 <?php } ?>
 <input type="submit" name="t8639" value="Haiku!" id="haiku">

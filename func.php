@@ -198,7 +198,7 @@ function postEntry($keyword="", $status, $file, $rtid = 0)
 	$req  = new HTTP_Request();
 	$req->setMethod(HTTP_REQUEST_METHOD_POST);
 	$req->setBasicAuth($username, $password);
-	if ($file && $isAndroid) {
+	if ($file) {
 		if ($file['type'] == 'image/jpeg'
 			|| $file['type'] == 'image/gif'
 			|| $file['type'] == 'image/png') {
