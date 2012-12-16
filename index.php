@@ -232,7 +232,7 @@ if ($login) {
 <textarea onkeyup="resize_textarea(event)"  name="sas" rows="3" id="status" placeholder="本文"><?php print $fillBody; ?></textarea><br>
 <?php if (!$mobile) { 
 /* ccept="image/*" capture="camera" */ ?>
-<input type="file" style="margin:0 0 20px 0;" name="file"></input>
+<input type="file" style="margin:0 0 20px 0;" name="file"></input><br>
 <input type="hidden" name="camdata">
 <?php } ?>
 <input type="submit" name="t8639" value="Haiku!" id="haiku">
