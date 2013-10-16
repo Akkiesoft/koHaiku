@@ -16,7 +16,7 @@ ul#headmenu li a{
 	color			:#fff;
 	text-decoration	:none;
 }
-ul#headmenu #user		{background:#d49997;width:34%;}
+ul#headmenu #user		{background:#d49997;width:33%;}
 ul#headmenu #public		{background:#9997d4;width:33%;}
 ul#headmenu #keyword	{background:#99d497;width:33%;}
 ul#headmenu:after	{
