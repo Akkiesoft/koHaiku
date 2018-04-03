@@ -133,7 +133,7 @@ function amazonLink($matches) {
 	return $out;
 }
 
-function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1) {
+function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1, $spamscore = 0) {
 	global $baseurl, $script, $dbg, $opt_showpict;
 
 	$out = "";
@@ -154,6 +154,9 @@ function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1) {
 		preg_match_all('/\n/', $text, $matches, PREG_OFFSET_CAPTURE);
 		$text = substr($text, 0, $matches[0][14][1]);
 		$text .= '<br><span style="color:#777;font-style:italic;">(省略されました。閲覧するには(Reply)を開いて下さい。行数'.$lines.'行)</span>';
+	}
+	if ($spamchecksw && $spamscore) {
+		$text = '<span style="color:#777;font-style:italic;">(このエントリーはスパムと判定されました。閲覧するには(Reply)を開いて下さい。スコア:'.$spamscore.')</span>';
 	}
 
 	// URLの処理

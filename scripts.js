@@ -87,6 +87,27 @@ function createXMLHttpRequest()
 	return XMLhttpObject;
 }
 
+/* キーワードフィルター */
+function keywordFilter(keyword)
+{
+	var filterList = [
+		'friendsoftuckermanravine.org',
+		'dcly.org',
+		'icampus21.com',
+		'www.reddit.com',
+		'www.2eros.com',
+		'www.pfadi-thala.ch',
+		'#NUDE',
+		'vivo'
+	];
+	for(var i=0; i<filterList.length; i++) {
+		if (keyword.indexOf(filterList[i]) >= 0) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
 /* JSONのデータを解析して表示 */
 function parseJSONforMenu(jsData)
 {
@@ -97,6 +118,9 @@ function parseJSONforMenu(jsData)
 		var keymode = 'k/';
 		if (0 <= keyword.search(/[#\/]/)) {
 			keymode = '?mode=key&param=';
+		}
+		if (keywordFilter(keyword)) {
+			continue;
 		}
 		var iLink  = keymode+encodeURIComponent(keyword);
 		var iTitle = data[i].title;

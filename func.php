@@ -41,12 +41,22 @@ function parseEntry($entry, $bgcol, $opt = '')
 	$keyword    = $entry->keyword;
 	$keywordName= $entry->target->title;
 	$keywordurl = getKeywordURL($keyword);
-	$status     = parseHaikuText($keyword, $entry->haiku_text, $mobile, $spamchksw);
 	$cli        = htmlspecialchars($entry->source);
 	$date       = date('Y-m-d H:i:s', strtotime($entry->created_at));
 	$star       = $entry->favorited;
 	$usericon   = $entry->user->profile_image_url;
+	$followers  = $entry->user->followers_count;
 	$dammylink  = '';
+
+	/* スパムチェック */
+	$spamscore = 0;
+	if (
+		preg_match('/^https?:/', $keyword)
+		&& $followers == 0
+		&& $star == 0
+	) {$spamscore++;}
+
+	$status     = parseHaikuText($keyword, $entry->haiku_text, $mobile, $spamchksw, $spamscore);
 
 	// Hatena Star
 	if ($mobile == 1) {
@@ -349,10 +359,25 @@ function getKeywordList($mode, $user = "")
 	$result = "<ul>";
 	$items = json_decode($req->getResponseBody());
 	foreach($items as $item) {
-		$link = getKeywordURL($item->word);
-		$result .= "<li><a href=\"".$link."\">".$item->title."</a></li>";
+		if (keywordFilter($link) == 0) {
+			$link = getKeywordURL($item->word);
+			$result .= "<li><a href=\"".$link."\">".$item->title."</a></li>";
+	}
 	}
 	return $result."</ul><small>※キーワード取得にかかった時間:".$time."秒</small>";
+}
+function keywordFilter($link) {
+	$filterlist = array(
+		'www.reddit.com',
+		'www.2eros.com',
+		'www.pfadi-thala.ch'
+	);
+	foreach ($filterlist as $item) {
+		if (strpos($link, $item) === true) {
+			return 1;
+		}
+	}
+	return 1;
 }
 
 function printCSS($mobile) {
