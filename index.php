@@ -208,6 +208,7 @@ if ($camdata || $file) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Expires" content="0"><meta http-equiv="Content-Style-Type" content="text/css"><base href="<?php print $script; ?>"><title>koHaiku</title><?php print $mobilehead; ?>
 <style type="text/css"><?php printCSS($mobile); ?></style>
+<meta name="ROBOTS" content="NOINDEX,NOFOLLOW">
 </head>
 <body>
 <?php
