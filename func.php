@@ -50,7 +50,7 @@ function parseEntry($entry, $bgcol, $opt = '')
 
 	// Hatena Star
 	if ($mobile == 1) {
-		$star_str = '<a href="http://s.hatena.ne.jp/star.add?sid=&rks=&uri='.$linkencoded.'&location='.$script.'"><img src="add.gif" /></a> ';
+		$star_str = '<a href="https://s.hatena.ne.jp/star.add?sid=&rks=&uri='.$linkencoded.'&location='.$script.'"><img src="add.gif" /></a> ';
 		if (0 < $star && $opt != 'nostar') {
 			$tmp = htmlspecialchars($id.'/'.$entryid);
 			$star_str .= '<a href="'.$script.'star/'.$tmp.'" class="star">★';
@@ -135,7 +135,7 @@ function parseEntries($entries, $color = 'usr', $showProfile = 0)
 							'<a href="f/'.$id.'">Favorites</a> / '.
 							'<a href="k/id:'.$id.'">About</a><br><br>'.
 					/*		'<a href="/">NGIDに追加する</a> '.*/
-							'<a href="http://www.hatena.ne.jp/faq/report/haiku?location=http%3A%2F%2Fh.hatena.ne.jp%2F'.$reportid.'&target_label='.$reportnick.'&target_url=http%3A%2F%2Fh.hatena.ne.jp%2F'.$reportid.'">はてなに通報する</a>';
+							'<a href="https://www.hatena.ne.jp/faq/report/haiku?location=http%3A%2F%2Fh.hatena.ne.jp%2F'.$reportid.'&target_label='.$reportnick.'&target_url=http%3A%2F%2Fh.hatena.ne.jp%2F'.$reportid.'">はてなに通報する</a>';
 			}
 			$out .= '<div id="ibox"><div id="asinpic"><img src="'. $icon .'" alt="'. $id .'"></div><div id="asininfo">'.
 					$nick .'<br><div id="asindetail">id:'. $id .'<br>'. $fans .' fans<br>'.$remark.'</div></div></div>';
@@ -156,7 +156,7 @@ function parseEntries($entries, $color = 'usr', $showProfile = 0)
 				$i = rawurlencode($showProfile);
 				$j = preg_replace('/\%/', '%25', $i);
 				$out .= $showProfile.'<div id="asindetail"><br>'.$addFavorite.
-						'<a href="http://www.hatena.ne.jp/faq/report/haiku?location=http%3A%2F%2Fh.hatena.ne.jp%2Fkeyword%2F'.$j.'&target_label='.$i.'&target_url=http%3A%2F%2Fh.hatena.ne.jp%2Fkeyword%2F'.$j.'">はてなに通報する</a>'.
+						'<a href="https://www.hatena.ne.jp/faq/report/haiku?location=http%3A%2F%2Fh.hatena.ne.jp%2Fkeyword%2F'.$j.'&target_label='.$i.'&target_url=http%3A%2F%2Fh.hatena.ne.jp%2Fkeyword%2F'.$j.'">はてなに通報する</a>'.
 						'</div>';
 			}
 			$out .= '</div>';
@@ -225,7 +225,7 @@ function postEntry($keyword="", $status, $file, $rtid = 0)
 function getStarData($entryurl)
 {
 	$starcount = 0;
-	$starinfo = file_get_contents('http://s.hatena.ne.jp/entry.json/?uri=http://h.hatena.ne.jp/'.$entryurl);
+	$starinfo = file_get_contents('https://s.hatena.ne.jp/entry.json/?uri=http://h.hatena.ne.jp/'.$entryurl);
 	$starinfo = json_decode($starinfo);
 	$starout = "";
 	if (isset($starinfo->entries[0]->colored_stars)) {

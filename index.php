@@ -207,6 +207,7 @@ if ($camdata || $file) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Expires" content="0"><meta http-equiv="Content-Style-Type" content="text/css"><base href="<?php print $script; ?>"><title>koHaiku</title><?php print $mobilehead; ?>
+<meta name="ROBOTS" content="NOINDEX,NOFOLLOW">
 <style type="text/css"><?php printCSS($mobile); ?></style>
 <meta name="ROBOTS" content="NOINDEX,NOFOLLOW">
 </head>
@@ -275,6 +276,6 @@ EOM;
 		$s .= getOperacamBoxHTML();
 	}
 	print preg_replace('/(\n|\t)/', '', $s);
-	print ($mobile != 1) ? '<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script><script type="text/javascript">'.getJavaScript().'</script>' : '';
+	print ($mobile != 1) ? '<script type="text/javascript" src="https://s.hatena.ne.jp/js/HatenaStar.js"></script><script type="text/javascript">'.getJavaScript().'</script>' : '';
 ?>
 </body></html>
