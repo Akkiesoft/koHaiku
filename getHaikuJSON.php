@@ -3,16 +3,16 @@
 
 	/* DBÚ‘± */
 	if ($usedb) {
-		if (! $mysql = mysql_connect($dbaddr, $dbuser, $dbpass) ) {
+		if (! $mysqli = mysqli_connect($dbaddr, $dbuser, $dbpass) ) {
 			print '{DB‚ÌÚ‘±‚ÉŽ¸”s‚µ‚Ü‚µ‚½cB}';
 			exit;
 		}
-		mysql_select_db($dbname, $mysql);
+		mysqli_select_db($dbname, $mysqli);
 
 		$query = "select * from kohaiku_cache";
-		$res = mysql_query($query, $mysql);
+		$res = mysqli_query($query, $mysqli);
 		$cache = array();
-		while ($line = mysql_fetch_object($res)) {
+		while ($line = mysqli_fetch_object($res)) {
 			$cache[$line->type] = array(
 				expire => intval($line->lastupdate),
 				data => $line->cachedata
@@ -30,7 +30,7 @@
 		if ($cache['hotkeyslist']['expire'] < $now) {
 			$data = file_get_contents("http://h.hatena.ne.jp/api/keywords/hot.json?without_related_keywords=1");
 			if ($usedb) {
-				mysql_query('update kohaiku_cache set lastupdate="'.$expire."\", cachedata='".$data."' where type = \"hotkeyslist\"", $mysql);
+				mysqli_query('update kohaiku_cache set lastupdate="'.$expire."\", cachedata='".$data."' where type = \"hotkeyslist\"", $mysqli);
 			}
 		} else {
 			$data = $cache[$_GET['type']]['data'];
