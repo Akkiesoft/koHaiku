@@ -123,7 +123,7 @@ function parseJSONforKeyPicker(jsData)
 
 /* モロモロ設定モノ */
 Hatena.Star.SiteConfig = { entryNodes: { '.entry': { uri: '.star-link', title: '.keyword', container: '.star' } } };
-Hatena.Star.PortalURL = 'http://8639.tk/5819/u/';
+Hatena.Star.PortalURL = 'https://kokuda.org/5819/u/';
 
 
 function popupElement(element, UserName) {
