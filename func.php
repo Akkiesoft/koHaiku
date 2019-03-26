@@ -66,7 +66,7 @@ function parseEntry($entry, $bgcol, $opt = '')
 	$replyFrom  = "";
 	if ($entry->in_reply_to_user_id != "" && $entry->in_reply_to_status_id != "") {
 		$targetUser = $entry->in_reply_to_user_id;
-		$targetUserIcon = ($mobile == 1) ? '' : '<img src="http://www.st-hatena.com/users/'.substr($targetUser, 0, 2).'/'.$targetUser.'/profile_s.gif" alt="'.$targetUser.'">';
+		$targetUserIcon = ($mobile == 1) ? '' : '<img src="http://cdn.profile-image.st-hatena.com/users/'.$targetUser.'/profile_s.gif" alt="'.$targetUser.'">';
 		$replyFrom .= '<a href="e/'.$entry->in_reply_to_status_id.'">←'.$targetUserIcon.$targetUser.'</a><br />';
 	}
 
@@ -74,7 +74,7 @@ function parseEntry($entry, $bgcol, $opt = '')
 	if ($entry->replies) {
 		foreach($entry->replies as $item) {
 //			$img = 'http://www.st-hatena.com/users/'.substr($item->user->name, 0, 2).'/'.$item->user->name.'/profile_s.gif';
-			$img = preg_replace('/profile/', 'profile_s', $item->user->profile_image_url);
+			$img = preg_replace('/profile\..+$/', 'profile_s.gif', $item->user->profile_image_url);
 			$replies .= '<a href="e/'.$item->id.'"><img src="'.$img.'" alt="'.$item->user->name.'" /></a> ';
 		}
 	}

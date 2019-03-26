@@ -58,7 +58,7 @@ function fotolifeSintax($matches) {
 	if ($type == 'g') { $ext = 'gif'; }
 	else if ($type == 'p') { $ext = 'png'; }
 	$link = 'http://f.hatena.ne.jp/'.$id.'/'.$date.$time;
-	$img  = 'http://cdn-ak.f.st-hatena.com/images/fotolife/'.$initial.'/'.$id.'/'.$date.'/'.$date.$time.'.'.$ext;
+	$img  = 'https://cdn-ak.f.st-hatena.com/images/fotolife/'.$initial.'/'.$id.'/'.$date.'/'.$date.$time.'.'.$ext;
 
 	$out = pictureLink($img, $alt, $link, 1);
 
@@ -69,7 +69,7 @@ function fotolifeSintax($matches) {
 <param name="movie" value="http://f.hatena.ne.jp/tools/flvplayer_s.swf">
 <param name="FlashVars" value="fotoid={$date}{$time}&amp;user={$id}">
 <param name="wmode" value="transparent">
-<a href="http://f.hatena.ne.jp/{$id}/{$date}{$time}"><img src="http://cdn-ak.f.st-hatena.com/images/fotolife/{$initial}/{$id}/{$date}/{$date}{$time}.jpg" alt="f:id:{$id}:{$date}{$time}f:movie"></a>
+<a href="http://f.hatena.ne.jp/{$id}/{$date}{$time}"><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/{$initial}/{$id}/{$date}/{$date}{$time}.jpg" alt="f:id:{$id}:{$date}{$time}f:movie"></a>
 </object>
 EOM;
 	}
@@ -81,7 +81,7 @@ function qbsintax($matches) {
 	$initial = substr($id,0,2);
 	$time = time();
 	// 読み込み
-	$url = 'http://www.st-hatena.com/users/'.$initial.'/'.$id.'/happie.gif';
+	$url = 'https://cdn.profile-image.st-hatena.com/users/'.$id.'/happie.gif';
 	$image = imagecreatefromGIF($url);
 	// 頭
 	$tmp = imagecreatetruecolor(75, 55);
@@ -126,7 +126,7 @@ function amazonLink($matches) {
 	$xml  = getAmazonItemXMLbyASIN($asin, $access_key_id, $secret_access_key);
 	if ($xml->Items->Request->Errors) {return "".$matches[0];}
 	$item = $xml->Items->Item;
-	$link  = 'http://www.amazon.co.jp/exec/obidos/ASIN/' . $asin . '/akkienisshi-22/ref=nosim/';
+	$link  = 'https://www.amazon.co.jp/exec/obidos/ASIN/' . $asin . '/akkienisshi-22/ref=nosim/';
 	$title = $item->ItemAttributes->Title;
 	$image = $item->SmallImage->URL;
 	$out = '<a href='.$baseurl.'k/asin%3A'.$asin.'><img src="'.$image.'" style="width:16px;height:16px;">'.$title.'</a>';
@@ -304,8 +304,8 @@ function parseHaikuText($keyword, $text, $mobile, $spamchecksw = 1) {
 			}
 		}
 		// ID Call
-		$pattern = '/id\:([-_0-9a-zA-Z]{2})([-_0-9a-zA-Z]+)/';
-		$replace = '<a href="'.$baseurl.'u/\\1\\2"><img src="http://www.st-hatena.com/users/\\1/\\1\\2/profile_s.gif">\\0</a>';
+		$pattern = '/id\:([-_0-9a-zA-Z]+)/';
+		$replace = '<a href="'.$baseurl.'u/\\1\\2"><img src="https://cdn.profile-image.st-hatena.com/users/\\1/profile_s.gif">\\0</a>';
 		$result = preg_replace($pattern, $replace, $match);
 		$text = substr_replace($text, $result, $offset, strlen($match));
 		$shift += strlen($result) - strlen($match);
